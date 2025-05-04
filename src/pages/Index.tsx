@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { ArrowDown } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import ScoreCard from '@/components/ScoreCard';
 
@@ -96,137 +95,16 @@ const Index = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Input Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Input Transaction Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {/* Required fields */}
-                <div className="space-y-4">
-                  <h3 className="font-medium">Required Fields</h3>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="userName">User Name</Label>
-                    <Input
-                      id="userName"
-                      placeholder="Enter user name"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="merchantName">Merchant Name</Label>
-                    <Input
-                      id="merchantName"
-                      placeholder="Enter merchant name"
-                      value={merchantName}
-                      onChange={(e) => setMerchantName(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="amount">Transaction Amount ($)</Label>
-                    <Input
-                      id="amount"
-                      type="number"
-                      min="0.01"
-                      step="0.01"
-                      placeholder="0.00"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="deviceLocation">Device Location (GPS coordinates)</Label>
-                    <Input
-                      id="deviceLocation"
-                      placeholder="e.g. 37.7749,-122.4194"
-                      value={deviceLocation}
-                      onChange={(e) => setDeviceLocation(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="deviceIp">Device IP</Label>
-                    <Input
-                      id="deviceIp"
-                      placeholder="e.g. 192.168.1.1"
-                      value={deviceIp}
-                      onChange={(e) => setDeviceIp(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="customerAge">Age of Customer</Label>
-                    <Input
-                      id="customerAge"
-                      type="number"
-                      min="0"
-                      placeholder="Enter age"
-                      value={customerAge}
-                      onChange={(e) => setCustomerAge(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Optional fields */}
-                <div className="space-y-4 pt-2 border-t">
-                  <h3 className="font-medium">Optional Fields</h3>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="paymentMode">Payment Mode</Label>
-                    <Select value={paymentMode} onValueChange={setPaymentMode}>
-                      <SelectTrigger id="paymentMode">
-                        <SelectValue placeholder="Select payment mode" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="virtual">Virtual</SelectItem>
-                        <SelectItem value="physical">Physical</SelectItem>
-                        <SelectItem value="digital">Digital</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="merchantCategoryCode">Merchant Category Code</Label>
-                    <Input
-                      id="merchantCategoryCode"
-                      placeholder="e.g. 5411"
-                      value={merchantCategoryCode}
-                      onChange={(e) => setMerchantCategoryCode(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" className="w-full mt-6">Analyze Transaction</Button>
-              </form>
-            </CardContent>
-          </Card>
-
-          {/* Output Section */}
-          <div className="space-y-6 flex flex-col justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Scores Section - Right Top */}
+          <div className="lg:col-span-1 lg:order-2">
             {elderFraudScore !== null && accountTakeoverScore !== null ? (
-              <>
-                <div className="flex items-center justify-center mb-4">
-                  <ArrowDown className="h-8 w-8 text-muted-foreground" />
-                </div>
-                
+              <div className="grid grid-cols-1 gap-6">
                 <ScoreCard 
                   title="Elder Fraud Score" 
                   score={elderFraudScore}
                   threshold={600}
-                  description="Evaluates the risk of financial exploitation targeting elderly customers. Scores above 600 indicate high risk."
+                  description="Evaluates the risk of financial exploitation targeting elderly customers."
                   reasons={elderFraudReasons}
                 />
                 
@@ -234,17 +112,136 @@ const Index = () => {
                   title="Account Takeover Score" 
                   score={accountTakeoverScore}
                   threshold={750}
-                  description="Measures the risk of unauthorized access to customer accounts. Scores above 750 indicate high risk."
+                  description="Measures the risk of unauthorized access to customer accounts."
                   reasons={accountTakeoverReasons}
                 />
-              </>
+              </div>
             ) : (
-              <div className="flex items-center justify-center h-full">
+              <div className="flex items-center justify-center bg-card rounded-lg border p-6 h-full">
                 <p className="text-muted-foreground text-center">
                   Enter transaction details and click "Analyze Transaction" to see fraud risk scores.
                 </p>
               </div>
             )}
+          </div>
+
+          {/* Input Section - Left */}
+          <div className="lg:col-span-2 lg:order-1">
+            <Card>
+              <CardHeader>
+                <CardTitle>Input Transaction Details</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Required fields */}
+                  <div className="space-y-4">
+                    <h3 className="font-medium">Required Fields</h3>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="userName">User Name</Label>
+                      <Input
+                        id="userName"
+                        placeholder="Enter user name"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="merchantName">Merchant Name</Label>
+                      <Input
+                        id="merchantName"
+                        placeholder="Enter merchant name"
+                        value={merchantName}
+                        onChange={(e) => setMerchantName(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="amount">Transaction Amount ($)</Label>
+                      <Input
+                        id="amount"
+                        type="number"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="0.00"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="deviceLocation">Device Location (GPS coordinates)</Label>
+                      <Input
+                        id="deviceLocation"
+                        placeholder="e.g. 37.7749,-122.4194"
+                        value={deviceLocation}
+                        onChange={(e) => setDeviceLocation(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="deviceIp">Device IP</Label>
+                      <Input
+                        id="deviceIp"
+                        placeholder="e.g. 192.168.1.1"
+                        value={deviceIp}
+                        onChange={(e) => setDeviceIp(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="customerAge">Age of Customer</Label>
+                      <Input
+                        id="customerAge"
+                        type="number"
+                        min="0"
+                        placeholder="Enter age"
+                        value={customerAge}
+                        onChange={(e) => setCustomerAge(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Optional fields */}
+                  <div className="space-y-4 pt-2 border-t">
+                    <h3 className="font-medium">Optional Fields</h3>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="paymentMode">Payment Mode</Label>
+                      <Select value={paymentMode} onValueChange={setPaymentMode}>
+                        <SelectTrigger id="paymentMode">
+                          <SelectValue placeholder="Select payment mode" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="virtual">Virtual</SelectItem>
+                          <SelectItem value="physical">Physical</SelectItem>
+                          <SelectItem value="digital">Digital</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="merchantCategoryCode">Merchant Category Code</Label>
+                      <Input
+                        id="merchantCategoryCode"
+                        placeholder="e.g. 5411"
+                        value={merchantCategoryCode}
+                        onChange={(e) => setMerchantCategoryCode(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="w-full mt-6">Analyze Transaction</Button>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </div>
         

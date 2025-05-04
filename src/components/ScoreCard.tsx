@@ -17,7 +17,7 @@ const ScoreCard: React.FC<ScoreCardProps> = ({ title, score, threshold, descript
   const isHighRisk = score > threshold;
   
   return (
-    <Card className="shadow-md">
+    <Card className="shadow-md h-full">
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center justify-between">
           <span>{title}</span>
