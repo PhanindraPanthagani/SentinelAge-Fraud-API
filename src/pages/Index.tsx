@@ -30,7 +30,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8 px-4">
         <div className="flex flex-col gap-2 mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Fraud Insight Guardian</h1>
+          <h1 className="text-3xl font-bold tracking-tight">SentinelAge Fraud API</h1>
           <p className="text-muted-foreground">
             Detect potential fraud with our advanced risk scoring system.
           </p>
