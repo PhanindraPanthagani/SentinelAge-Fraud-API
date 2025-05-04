@@ -2,15 +2,18 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 interface ScoreCardProps {
   title: string;
   score: number;
   threshold: number;
   description: string;
+  reasons?: string[];
 }
 
-const ScoreCard: React.FC<ScoreCardProps> = ({ title, score, threshold, description }) => {
+const ScoreCard: React.FC<ScoreCardProps> = ({ title, score, threshold, description, reasons }) => {
   const isHighRisk = score > threshold;
   
   return (
@@ -46,6 +49,22 @@ const ScoreCard: React.FC<ScoreCardProps> = ({ title, score, threshold, descript
             />
           </div>
           <p className="text-sm text-muted-foreground mt-2">{description}</p>
+          
+          {isHighRisk && reasons && reasons.length > 0 && (
+            <Alert variant="destructive" className="mt-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="mt-1">
+                  <strong>Potential Fraud Indicators:</strong>
+                  <ul className="list-disc pl-5 mt-1 text-sm">
+                    {reasons.map((reason, index) => (
+                      <li key={index}>{reason}</li>
+                    ))}
+                  </ul>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
       </CardContent>
     </Card>

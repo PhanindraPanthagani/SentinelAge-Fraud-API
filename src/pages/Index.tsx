@@ -20,6 +20,8 @@ const Index = () => {
 
   const [elderFraudScore, setElderFraudScore] = useState<number | null>(null);
   const [accountTakeoverScore, setAccountTakeoverScore] = useState<number | null>(null);
+  const [elderFraudReasons, setElderFraudReasons] = useState<string[]>([]);
+  const [accountTakeoverReasons, setAccountTakeoverReasons] = useState<string[]>([]);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +30,60 @@ const Index = () => {
     const mockElderScore = Math.floor(Math.random() * 401) + 400; // 400-800 range
     const mockAccountScore = Math.floor(Math.random() * 401) + 500; // 500-900 range
 
+    // Generate reasons based on inputs and scores
+    const generatedElderReasons: string[] = [];
+    const generatedAccountReasons: string[] = [];
+    
+    // Elder fraud reasons logic
+    if (mockElderScore > 600) {
+      if (parseInt(customerAge) > 65) {
+        generatedElderReasons.push(`Elevated risk due to customer age (${customerAge}).`);
+      }
+      
+      if (parseFloat(amount) > 1000) {
+        generatedElderReasons.push(`Unusually large transaction amount ($${amount}).`);
+      }
+      
+      if (paymentMode === 'virtual') {
+        generatedElderReasons.push('Virtual payment method less common for elderly customers.');
+      }
+      
+      if (merchantCategoryCode && ['5734', '7995', '4829'].includes(merchantCategoryCode)) {
+        generatedElderReasons.push(`Suspicious merchant category code (${merchantCategoryCode}).`);
+      }
+      
+      // Ensure we have at least one reason
+      if (generatedElderReasons.length === 0) {
+        generatedElderReasons.push('Multiple risk factors detected in transaction pattern.');
+      }
+    }
+    
+    // Account takeover reasons logic
+    if (mockAccountScore > 750) {
+      if (deviceIp.includes('192.168') || deviceIp.includes('10.0')) {
+        generatedAccountReasons.push(`Suspicious IP address detected (${deviceIp}).`);
+      }
+      
+      if (deviceLocation && !deviceLocation.includes(',')) {
+        generatedAccountReasons.push('Invalid GPS location format.');
+      } else if (deviceLocation) {
+        generatedAccountReasons.push('Device location differs from typical usage patterns.');
+      }
+      
+      if (paymentMode === 'digital') {
+        generatedAccountReasons.push('Digital payment method associated with higher fraud risk.');
+      }
+      
+      // Ensure we have at least one reason
+      if (generatedAccountReasons.length === 0) {
+        generatedAccountReasons.push('Unusual device or access pattern detected.');
+      }
+    }
+
     setElderFraudScore(mockElderScore);
     setAccountTakeoverScore(mockAccountScore);
+    setElderFraudReasons(generatedElderReasons);
+    setAccountTakeoverReasons(generatedAccountReasons);
   };
 
   return (
@@ -173,6 +227,7 @@ const Index = () => {
                   score={elderFraudScore}
                   threshold={600}
                   description="Evaluates the risk of financial exploitation targeting elderly customers. Scores above 600 indicate high risk."
+                  reasons={elderFraudReasons}
                 />
                 
                 <ScoreCard 
@@ -180,6 +235,7 @@ const Index = () => {
                   score={accountTakeoverScore}
                   threshold={750}
                   description="Measures the risk of unauthorized access to customer accounts. Scores above 750 indicate high risk."
+                  reasons={accountTakeoverReasons}
                 />
               </>
             ) : (

@@ -9,6 +9,8 @@ export interface Transaction {
   date: string;
   elderFraudScore: number;
   accountTakeoverScore: number;
+  elderFraudReasons?: string[];
+  accountTakeoverReasons?: string[];
 }
 
 export interface MerchantFraudRate {
